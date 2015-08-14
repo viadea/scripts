@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+use File::Find;
+
+if ($#ARGV != 0) {
+ print "usage: findjar.pl classname\n";
+ exit;
+}
+
+my $classname = $ARGV[0];
+
+find(\&wanted, ".");
+
+sub wanted{
+ my $file = $_;
+ if ((-f $file) && ($file =~ /\.jar$/)){
+  my @result = qx (jar -tf $file |grep -i $classname);
+  if (@result){
+   print "==============$file===============\n";
+   print @result;
+  }
+
+ }
+}
